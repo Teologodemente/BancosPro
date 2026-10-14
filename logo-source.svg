@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Fondo: degradado profundo tipo "obsidiana premium" -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1226"/>
+      <stop offset="55%" stop-color="#0a0f1f"/>
+      <stop offset="100%" stop-color="#070b16"/>
+    </linearGradient>
+
+    <!-- Resplandor central -->
+    <radialGradient id="glow" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.35"/>
+      <stop offset="55%" stop-color="#00d4ff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Anillo exterior: aurora cian → azul → púrpura -->
+    <linearGradient id="ringGrad" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="45%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+
+    <!-- Edificio: acero oscuro con brillo -->
+    <linearGradient id="towerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Columnas: luz cian viva -->
+    <linearGradient id="colGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+
+    <!-- Moneda: oro brillante -->
+    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <linearGradient id="coinEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo (maskable-safe: el contenido vive dentro del 80% central) -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+
+  <!-- Rejilla sutil de "piso financiero" -->
+  <g stroke="#1e3a5f" stroke-width="1" opacity="0.35">
+    <line x1="48" y1="416" x2="464" y2="416"/>
+    <line x1="96" y1="444" x2="416" y2="444"/>
+    <line x1="144" y1="472" x2="368" y2="472"/>
+  </g>
+
+  <!-- Anillo / halo de energía -->
+  <circle cx="256" cy="244" r="150" fill="none" stroke="url(#ringGrad)" stroke-width="10" opacity="0.9"/>
+  <circle cx="256" cy="244" r="150" fill="none" stroke="#22d3ee" stroke-width="2" opacity="0.35"/>
+
+  <!-- Columnas del templo bancario -->
+  <g fill="url(#colGrad)">
+    <rect x="164" y="214" width="26" height="118" rx="8"/>
+    <rect x="243" y="214" width="26" height="118" rx="8"/>
+    <rect x="322" y="214" width="26" height="118" rx="8"/>
+  </g>
+  <!-- Brillo interno de columnas -->
+  <g fill="#e0f2fe" opacity="0.55">
+    <rect x="170" y="222" width="6" height="100" rx="3"/>
+    <rect x="249" y="222" width="6" height="100" rx="3"/>
+    <rect x="328" y="222" width="6" height="100" rx="3"/>
+  </g>
+
+  <!-- Frontón (techo triangular) -->
+  <path d="M256 130 L372 202 L140 202 Z" fill="url(#towerGrad)" stroke="url(#ringGrad)" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M256 152 L338 200 L174 200 Z" fill="#00d4ff" opacity="0.14"/>
+
+  <!-- Cornisa -->
+  <rect x="146" y="204" width="220" height="16" rx="7" fill="url(#towerGrad)" stroke="url(#ringGrad)" stroke-width="5"/>
+
+  <!-- Base / escalinata -->
+  <rect x="140" y="334" width="232" height="16" rx="7" fill="url(#towerGrad)" stroke="url(#ringGrad)" stroke-width="5"/>
+  <rect x="124" y="354" width="264" height="18" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Moneda estelar: el "$" del retiro -->
+  <g>
+    <ellipse cx="256" cy="392" rx="52" ry="14" fill="#000" opacity="0.35"/>
+    <circle cx="256" cy="368" r="44" fill="url(#coinEdge)"/>
+    <circle cx="256" cy="364" r="44" fill="url(#coinGrad)"/>
+    <circle cx="256" cy="364" r="34" fill="none" stroke="#fef3c7" stroke-width="3" opacity="0.8"/>
+    <text x="256" y="384" font-family="Georgia, 'Times New Roman', serif" font-size="58" font-weight="bold" text-anchor="middle" fill="#7c2d12">$</text>
+    <!-- Brillo especular -->
+    <ellipse cx="238" cy="344" rx="16" ry="9" fill="#fff" opacity="0.55" transform="rotate(-28 238 344)"/>
+  </g>
+
+  <!-- Partículas de datos -->
+  <g fill="#22d3ee">
+    <circle cx="120" cy="150" r="5" opacity="0.9"/>
+    <circle cx="398" cy="164" r="4" opacity="0.8"/>
+    <circle cx="104" cy="300" r="3.5" opacity="0.7"/>
+    <circle cx="412" cy="304" r="5" opacity="0.85"/>
+  </g>
+  <g fill="#a855f7">
+    <circle cx="386" cy="112" r="6" opacity="0.8"/>
+    <circle cx="130" cy="392" r="4" opacity="0.7"/>
+  </g>
+
+  <!-- Reflejo superior del anillo -->
+  <path d="M146 196 A150 150 0 0 1 256 94" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+</svg>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#060a12">
+  <meta name="description" content="BANCOS STARK Pro - Sistema profesional de seguimiento de retiros">
+  <title>BANCOS STARK Pro</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ═══ SPLASH SCREEN ═══ -->
+  <div class="splash-screen" id="splashScreen">
+    <!-- Aurora premium de fondo (glassmorphism de nueva generación) -->
+    <div class="aurora" aria-hidden="true">
+      <div class="aurora-blob aurora-1"></div>
+      <div class="aurora-blob aurora-2"></div>
+      <div class="aurora-blob aurora-3"></div>
+    </div>
+    <div class="splash-content">
+      <div class="splash-logo-container">
+        <div class="splash-ring splash-ring-1"></div>
+        <div class="splash-ring splash-ring-2"></div>
+        <div class="splash-ring splash-ring-3"></div>
+        <div class="splash-glass"></div>
+        <img class="splash-logo" src="icon-512x512.png" alt="BANCOS STARK Pro" draggable="false">
+      </div>
+      <div class="splash-title">BANCOS STARK<span class="splash-pro">Pro</span></div>
+      <div class="splash-subtitle">Sistema de Retiros Profesional</div>
+      <div class="splash-loader">
+        <div class="splash-loader-bar"></div>
+      </div>
+      <div class="splash-status" id="splashStatus">Inicializando sistemas...</div>
+    </div>
+    <div class="splash-particles" id="splashParticles"></div>
+  </div>
+
+  <!-- ═══ MAIN APP ═══ -->
+  <div class="app-container" id="appContainer" style="display:none;">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="header-logo">
+            <img src="icon-192x192.png" alt="" draggable="false">
+          </div>
+          <div>
+            <div class="header-title">BANCOS STARK <span class="header-pro">Pro</span></div>
+            <div class="header-subtitle" id="headerDate"></div>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn-header btn-finalize" id="btnFinalizeDay" aria-label="Finalizar día" title="Finalizar día">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 10 17 14 13"/></svg>
+          </button>
+          <button class="btn-header" id="btnHistory" aria-label="Historial">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+          <button class="btn-header btn-add-glow" id="btnAdd" aria-label="Agregar retiro">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- Jarvis AI Bar -->
+      <div class="jarvis-bar" id="jarvisBar">
+        <div class="jarvis-pulse"></div>
+        <div class="jarvis-icon">🤖</div>
+        <div class="jarvis-message" id="jarvisMessage">
+          <span class="jefe">Jefe,</span> inicializando sistemas...
+        </div>
+      </div>
+
+      <!-- ═══ DASHBOARD PROFESIONAL ═══
+           KPIs globales compactos + gráfico donut de distribución POR BANCO.
+           Sustituye al cuadro grande anterior (que duplicaba la información). -->
+      <div class="summary-dashboard" id="summaryDashboard" style="display:none;">
+
+        <!-- KPIs globales: una fila compacta con las cifras clave -->
+        <div class="kpi-row">
+          <div class="kpi kpi-total">
+            <div class="kpi-label">Total Programado</div>
+            <div class="kpi-value" id="totalGeneral">$0.00</div>
+            <div class="kpi-sub" id="totalSub">0 retiros</div>
+          </div>
+          <div class="kpi kpi-retirado">
+            <div class="kpi-label">Ya Retirado</div>
+            <div class="kpi-value" id="totalRetirado">$0.00</div>
+            <div class="kpi-sub" id="kpiPercent">0% del total</div>
+          </div>
+          <div class="kpi kpi-falta">
+            <div class="kpi-label">Falta por Sacar</div>
+            <div class="kpi-value" id="totalFalta">$0.00</div>
+            <div class="kpi-sub" id="kpiBancos">0 bancos</div>
+          </div>
+        </div>
+
+        <!-- Barra de progreso global -->
+        <div class="summary-progress-track">
+          <div class="summary-progress-fill" id="summaryProgressFill" style="width:0%;"></div>
+        </div>
+
+        <!-- Panel de análisis: donut por banco + leyenda + estados -->
+        <div class="analysis-panel">
+          <!-- Gráfico donut: distribución del monto programado POR BANCO -->
+          <div class="donut-wrap">
+            <svg class="donut-chart" viewBox="0 0 120 120" id="donutChart" aria-label="Distribución por banco" role="img">
+              <circle class="donut-track" cx="60" cy="60" r="52"></circle>
+              <g id="donutSegments" transform="rotate(-90 60 60)"></g>
+            </svg>
+            <div class="donut-center">
+              <div class="donut-center-value" id="donutValue">$0</div>
+              <div class="donut-center-label" id="donutLabel">Total</div>
+            </div>
+          </div>
+
+          <!-- Leyenda por banco (colores del donut) + contadores de estado -->
+          <div class="analysis-side">
+            <div class="bank-legend" id="bankLegend" aria-live="polite"></div>
+            <div class="status-chips">
+              <div class="status-chip sc-red">
+                <span class="sc-icon" aria-hidden="true"></span>
+                <span class="sc-value" id="countRed">0</span>
+                <span class="sc-label">Pend.</span>
+              </div>
+              <div class="status-chip sc-orange">
+                <span class="sc-icon" aria-hidden="true"></span>
+                <span class="sc-value" id="countOrange">0</span>
+                <span class="sc-label">Proc.</span>
+              </div>
+              <div class="status-chip sc-green">
+                <span class="sc-icon" aria-hidden="true"></span>
+                <span class="sc-value" id="countGreen">0</span>
+                <span class="sc-label">Listos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjetas de totales POR BANCO: cada banco conserva sus propios
+             totales sin mezclarse con los demás (evita que las cuentas se
+             pierdan al sumar todo junto). Se generan dinámicamente en app.js. -->
+        <div class="bank-totals" id="bankTotals" aria-live="polite">
+          <!-- inyectadas por renderBankTotals() en app.js -->
+        </div>
+
+      </div>
+
+      <!-- Bank Cards List -->
+      <div class="bank-list" id="bankList"></div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-visual">
+          <div class="empty-circle">
+            <img class="empty-icon-img" src="icon-192x192.png" alt="" draggable="false">
+          </div>
+          <div class="empty-rings">
+            <div class="empty-ring"></div>
+            <div class="empty-ring"></div>
+          </div>
+        </div>
+        <div class="empty-title">Sin retiros activos</div>
+        <div class="empty-desc">Toca el botón <strong>+</strong> para agregar un nuevo retiro y comenzar a rastrear.</div>
+        <button class="btn-empty-add" id="btnEmptyAdd">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nuevo Retiro
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ MODAL: Nuevo Retiro ═══ -->
+  <div class="modal-overlay" id="modalAdd">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">Nuevo Retiro</div>
+        <button class="modal-close" id="btnCancelAdd" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="steps-indicator">
+        <div class="step active" id="step1Indicator">
+          <div class="step-dot">1</div>
+          <div class="step-text">Empresa</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="step2Indicator">
+          <div class="step-dot">2</div>
+          <div class="step-text">Banco</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="step3Indicator">
+          <div class="step-dot">3</div>
+          <div class="step-text">Monto</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Empresa -->
+      <div class="form-step active" id="step1">
+        <div class="form-group">
+          <label class="form-label">Seleccionar Empresa</label>
+          <div class="company-grid" id="companyGrid">
+            <button class="company-card" data-company="Sertecma">
+              <div class="cc-icon" style="background: linear-gradient(135deg, #00d4ff, #0090ff);">S</div>
+              <div class="cc-name">Sertecma</div>
+            </button>
+            <button class="company-card" data-company="Sertecgarce">
+              <div class="cc-icon" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">SG</div>
+              <div class="cc-name">Sertecgarce</div>
+            </button>
+            <button class="company-card" data-company="Tecnología">
+              <div class="cc-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">T</div>
+              <div class="cc-name">Tecnología</div>
+            </button>
+          </div>
+        </div>
+        <button class="btn-next" id="btnStep1Next" disabled>
+          Continuar
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <!-- Step 2: Banco -->
+      <div class="form-step" id="step2">
+        <div class="form-group">
+          <label class="form-label">Seleccionar Banco</label>
+          <div class="bank-grid" id="bankGrid">
+            <button class="bank-option" data-bank="BanRegio">
+              <div class="bo-logo" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">BR</div>
+              <div class="bo-info">
+                <div class="bo-name">BanRegio</div>
+                <div class="bo-detail">Cierre 17:00</div>
+              </div>
+              <div class="bo-check">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </button>
+            <button class="bank-option" data-bank="Santander">
+              <div class="bo-logo" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">ST</div>
+              <div class="bo-info">
+                <div class="bo-name">Santander</div>
+                <div class="bo-detail">Cierre 16:00</div>
+              </div>
+              <div class="bo-check">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </button>
+            <button class="bank-option" data-bank="BanBajío">
+              <div class="bo-logo" style="background: linear-gradient(135deg, #e11d48, #be123c);">BB</div>
+              <div class="bo-info">
+                <div class="bo-name">BanBajío</div>
+                <div class="bo-detail">Cierre 16:00</div>
+              </div>
+              <div class="bo-check">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn-back" id="btnStep2Back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Atrás
+          </button>
+          <button class="btn-next" id="btnStep2Next" disabled>
+            Continuar
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Monto y Confirmación -->
+      <div class="form-step" id="step3">
+        <!-- Resumen de selección -->
+        <div class="selection-summary" id="selectionSummary">
+          <div class="ss-row">
+            <span class="ss-label">Empresa</span>
+            <span class="ss-value" id="ssCompany">-</span>
+          </div>
+          <div class="ss-row">
+            <span class="ss-label">Banco</span>
+            <span class="ss-value" id="ssBank">-</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Monto Total a Retirar</label>
+          <div class="amount-input-wrapper">
+            <span class="amount-prefix">$</span>
+            <input class="amount-input" type="number" id="inputAmount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div class="amount-hint">Ingresa el monto total que necesitas retirar</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Hora de Cierre del Banco</label>
+          <input class="form-input" type="time" id="inputCloseTime" value="16:00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notas <span class="optional-tag">Opcional</span></label>
+          <input class="form-input" type="text" id="inputBankNotes" placeholder="Referencias, contactos, observaciones..." inputmode="text">
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-back" id="btnStep3Back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Atrás
+          </button>
+          <button class="btn-submit" id="btnSaveBank">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Guardar Retiro
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Registrar Retiro ═══ -->
+  <div class="modal-overlay" id="modalWithdraw">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">Registrar Retiro</div>
+        <button class="modal-close" id="btnCancelWithdraw" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="withdraw-info-card" id="withdrawInfoCard">
+        <div class="wi-bank" id="withdrawBankName">-</div>
+        <div class="wi-company" id="withdrawBankCompany">-</div>
+        <div class="wi-divider"></div>
+        <div class="wi-row">
+          <span>Total</span>
+          <span id="withdrawTotal">$0</span>
+        </div>
+        <div class="wi-row">
+          <span>Retirado</span>
+          <span id="withdrawRetirado">$0</span>
+        </div>
+        <div class="wi-row wi-remaining">
+          <span>Falta por sacar</span>
+          <span id="withdrawRestante">$0</span>
+        </div>
+        <div class="wi-progress">
+          <div class="wi-progress-fill" id="withdrawProgressFill"></div>
+        </div>
+      </div>
+
+      <!-- Todo junto, sin botones ni toggles: los datos del cheque están
+           SIEMPRE visibles para registrar en un solo toque. -->
+      <div class="withdraw-cheques-section" id="withdrawChequesSection">
+        <div class="withdraw-cheque-fields" id="withdrawChequeFields">
+          <div class="withdraw-cheque-grid">
+            <div class="form-group wcg-item">
+              <label class="form-label">No. Cheque</label>
+              <input class="form-input" type="text" id="withdrawChequeNumber" placeholder="001234" inputmode="numeric">
+            </div>
+            <div class="form-group wcg-item">
+              <label class="form-label">Nombre</label>
+              <input class="form-input" type="text" id="withdrawChequeName" placeholder="Nombre o nota" inputmode="text">
+            </div>
+            <div class="form-group wcg-item wcg-full">
+              <label class="form-label">Sucursal</label>
+              <input class="form-input" type="text" id="withdrawChequeAlias" placeholder="Sucursal Centro, Matriz..." inputmode="text">
+            </div>
+            <div class="form-group wcg-item wcg-full">
+              <label class="form-label">Notas</label>
+              <input class="form-input" type="text" id="withdrawChequeNotes" placeholder="Referencias, contactos, observaciones..." inputmode="text">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cantidad a retirar: al toque, entre los datos del cheque y los botones -->
+      <div class="form-group">
+        <label class="form-label">Cantidad a Retirar</label>
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix">$</span>
+          <input class="amount-input" type="number" id="inputWithdrawAmount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+        </div>
+      </div>
+
+      <!-- Acciones SIEMPRE a la mano: Registrar/Cancelar fijos al pie del
+           modal. La cantidad vive arriba, entre los datos y los botones. -->
+      <div class="modal-actions-sticky">
+        <div class="btn-group">
+          <button class="btn-cancel" id="btnCancelWithdrawAction">Cancelar</button>
+          <button class="btn-submit" id="btnConfirmWithdraw">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Registrar Retiro
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Finalizar Día ═══ -->
+  <div class="modal-overlay" id="modalFinalize">
+    <div class="modal modal-small">
+      <div class="modal-handle"></div>
+      <div class="delete-icon">📅</div>
+      <div class="delete-title">¿Finalizar el día?</div>
+      <div class="delete-desc">Se guardará un resumen del día y se limpiarán todos los retiros activos para comenzar un nuevo día de labores.</div>
+      <div class="btn-group">
+        <button class="btn-cancel" id="btnCancelFinalize">Cancelar</button>
+        <button class="btn-danger" id="btnConfirmFinalize" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">
+          📅 Finalizar Día
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Historial - Lista de Días ═══ -->
+  <div class="modal-overlay" id="modalHistory">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">📅 Historial de Días</div>
+        <button class="modal-close" id="btnCloseHistory" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="btn-group" style="margin-top:12px;">
+        <button class="btn-share" id="btnShareLatestDay">📤 Compartir resumen</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+      <div class="history-empty" id="historyEmpty" style="display:none;">
+        <div style="font-size:36px; margin-bottom:12px;">📭</div>
+        <div style="font-size:0.85rem; color:var(--text-muted);">No hay días archivados aún</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Detalle del Día ═══ -->
+  <div class="modal-overlay" id="modalDayDetail">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title" id="dayDetailTitle">Resumen del Día</div>
+        <button class="modal-close" id="btnCloseDayDetail" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="day-detail-content" id="dayDetailContent"></div>
+      <div class="btn-group" style="margin-top:16px;">
+        <button class="btn-cancel" id="btnDeleteDay" style="margin-top:0; border-color: var(--status-red-border); color: var(--status-red);">
+          🗑️ Eliminar Día
+        </button>
+        <button class="btn-cancel" id="btnEditDay" style="margin-top:0;">
+          ✏️ Modificar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Editar Registro del Día ═══ -->
+  <div class="modal-overlay" id="modalEditRecord">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">✏️ Editar Registro</div>
+        <button class="modal-close" id="btnCloseEditRecord" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Empresa</label>
+        <select class="form-input" id="editRecordCompany">
+          <option value="Sertecma">Sertecma</option>
+          <option value="Sertecgarce">Sertecgarce</option>
+          <option value="Tecnología">Tecnología</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Banco</label>
+        <select class="form-input" id="editRecordBank">
+          <option value="BanRegio">BanRegio</option>
+          <option value="Santander">Santander</option>
+          <option value="BanBajío">BanBajío</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Monto Total</label>
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix">$</span>
+          <input class="amount-input" type="number" id="editRecordTotal" min="0" step="0.01" inputmode="decimal">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Monto Retirado</label>
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix">$</span>
+          <input class="amount-input" type="number" id="editRecordWithdrawn" min="0" step="0.01" inputmode="decimal">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notas <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="editRecordNotes" placeholder="Referencias, contactos, observaciones..." inputmode="text">
+      </div>
+      <div class="btn-group">
+        <button class="btn-cancel" id="btnCancelEditRecord" style="margin-top:0;">Cancelar</button>
+        <button class="btn-submit" id="btnSaveEditRecord">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Editar Monto Total ═══ -->
+  <div class="modal-overlay" id="modalEditBank">
+    <div class="modal modal-small">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title">✏️ Editar Monto</div>
+        <button class="modal-close" id="btnCloseEditBank" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="edit-bank-info" id="editBankInfo">
+        <div class="edit-bank-company" id="editBankCompanyDisplay">-</div>
+        <div class="edit-bank-name" id="editBankNameDisplay">-</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Monto Total de esta empresa</label>
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix">$</span>
+          <input class="amount-input" type="number" id="editBankTotal" min="0" step="0.01" inputmode="decimal">
+        </div>
+        <div class="edit-bank-hint">Cambia el monto general asignado a esta empresa</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notas <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="editBankNotes" placeholder="Referencias, contactos, observaciones..." inputmode="text">
+      </div>
+      <div class="btn-group">
+        <button class="btn-cancel" id="btnCancelEditBank" style="margin-top:0;">Cancelar</button>
+        <button class="btn-submit" id="btnSaveEditBank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Editar Cheque ═══ -->
+  <div class="modal-overlay" id="modalEditCheque">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div class="modal-title" id="editItemTitle">✏️ Editar Cheque</div>
+        <button class="modal-close" id="btnCloseEditCheque" aria-label="Cerrar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="cheque-bank-info" id="editChequeBankInfo">
+        <span id="editChequeBankName">-</span>
+        <span id="editChequeBankCompany">-</span>
+      </div>
+
+      <div class="form-group" id="grpEditBrand">
+        <label class="form-label">Marca <span class="optional-tag">Opcional</span></label>
+        <select class="form-input" id="inputEditBrand">
+          <option value="">Seleccionar…</option>
+          <option value="Visa">Visa</option>
+          <option value="Mastercard">Mastercard</option>
+          <option value="Amex">Amex</option>
+          <option value="Otra">Otra</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="grpEditNumber">
+        <label class="form-label" id="lblEditNumber">Número <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="inputEditNumber" placeholder="Ej: 001234" inputmode="text">
+      </div>
+
+      <div class="form-group" id="grpEditDigits">
+        <label class="form-label">Últimos 4 <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="inputEditDigits" placeholder="1234" inputmode="numeric" maxlength="4">
+      </div>
+
+      <div class="form-group" id="grpEditAmount">
+        <label class="form-label" id="lblEditAmount">Monto</label>
+        <div class="amount-input-wrapper">
+          <span class="amount-prefix">$</span>
+          <input class="amount-input" type="number" id="inputEditChequeAmount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="form-group" id="grpEditName">
+        <label class="form-label">Nombre / Cliente <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="inputEditChequeName" placeholder="Nombre, cliente, nota, etc." inputmode="text">
+      </div>
+
+      <div class="form-group" id="grpEditAlias">
+        <label class="form-label">Alias / Sucursal <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="inputEditChequeAlias" placeholder="Ej: Sucursal Centro, Matriz..." inputmode="text">
+      </div>
+
+      <div class="form-group" id="grpEditNotes">
+        <label class="form-label">Notas <span class="optional-tag">Opcional</span></label>
+        <input class="form-input" type="text" id="inputEditNotes" placeholder="Referencias, contactos, observaciones..." inputmode="text">
+      </div>
+
+      <div class="btn-group">
+        <button class="btn-cancel" id="btnCancelEditCheque" style="margin-top:0;">Cancelar</button>
+        <button class="btn-submit" id="btnSaveEditCheque">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="btnSaveEditLabel">Guardar Cheque</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: Confirmar Eliminación ═══ -->
+  <div class="modal-overlay" id="modalDelete">
+    <div class="modal modal-small">
+      <div class="modal-handle"></div>
+      <div class="delete-icon">🗑️</div>
+      <div class="delete-title">¿Eliminar este retiro?</div>
+      <div class="delete-desc">Esta acción no se puede deshacer. Se perderán todos los datos de este retiro.</div>
+      <div class="btn-group">
+        <button class="btn-cancel" id="btnCancelDelete">Cancelar</button>
+        <button class="btn-danger" id="btnConfirmDelete">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <div class="toast-icon" id="toastIcon">✅</div>
+    <div class="toast-message" id="toastMessage">Operación exitosa</div>
+  </div>
+
+  <script>
+    // Apertura directa del modal de retiro: funciona aunque la caché del
+    // service worker sirva un app.js viejo (el HTML + este inline se ejecutan
+    // siempre). openWithdraw es global porque app.js la define en top-level.
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('[data-action="withdraw"]') : null;
+      if (btn && typeof openWithdraw === 'function') {
+        e.preventDefault();
+        e.stopPropagation();
+        openWithdraw(btn.dataset.bank);
+      }
+    }, true);
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

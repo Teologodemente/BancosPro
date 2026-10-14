@@ -1,0 +1,2952 @@
+/* ═══════════════════════════════════════════════════════════════
+   BANKTRACKER PRO - Ultra Premium Dark Theme
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg-primary: #060a12;
+  --bg-secondary: #0c1220;
+  --bg-card: #111a2e;
+  --bg-card-hover: #162040;
+  --bg-elevated: #1a2540;
+  --border-color: #1e2d4a;
+  --border-subtle: #152035;
+  --border-glow: rgba(0, 212, 255, 0.15);
+  --text-primary: #eaf0ff;
+  --text-secondary: #8899bb;
+  --text-muted: #4a5a7a;
+  --accent-cyan: #00d4ff;
+  --accent-cyan-soft: rgba(0, 212, 255, 0.12);
+  --accent-cyan-glow: rgba(0, 212, 255, 0.25);
+  --accent-blue: #3b82f6;
+  --accent-purple: #a855f7;
+  --status-red: #ef4444;
+  --status-red-soft: rgba(239, 68, 68, 0.1);
+  --status-red-border: rgba(239, 68, 68, 0.25);
+  --status-orange: #f59e0b;
+  --status-orange-soft: rgba(245, 158, 11, 0.1);
+  --status-orange-border: rgba(245, 158, 11, 0.25);
+  --status-green: #22c55e;
+  --status-green-soft: rgba(34, 197, 94, 0.1);
+  --status-green-border: rgba(34, 197, 94, 0.25);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(0, 212, 255, 0.08);
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   SPLASH SCREEN — glassmorphism + aurora (nueva generación)
+   ═══════════════════════════════════════════════════════════════ */
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  overflow: hidden;
+}
+
+/* Aurora de fondo: manchas de color que se desplazan lentamente.
+   Da profundidad cinematográfica sin ruido (solo en el arranque). */
+.aurora {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  filter: blur(60px) saturate(140%);
+  opacity: 0.55;
+}
+
+.aurora-blob {
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  min-width: 320px;
+  min-height: 320px;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora-1 {
+  top: -8%;
+  left: -6%;
+  background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.55), transparent 65%);
+  animation: auroraDrift 14s ease-in-out infinite;
+}
+
+.aurora-2 {
+  bottom: -12%;
+  right: -8%;
+  background: radial-gradient(circle at 60% 60%, rgba(168, 85, 247, 0.5), transparent 65%);
+  animation: auroraDrift 18s ease-in-out infinite reverse;
+}
+
+.aurora-3 {
+  top: 40%;
+  left: 55%;
+  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.45), transparent 65%);
+  animation: auroraDrift 22s ease-in-out infinite;
+}
+
+@keyframes auroraDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6vw, -4vh) scale(1.12); }
+  66% { transform: translate(-5vw, 5vh) scale(0.94); }
+}
+
+.splash-screen.fade-out {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+.splash-content {
+  text-align: center;
+  z-index: 2;
+  /* iPhone: evita que el título quede bajo el notch / Dynamic Island */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.splash-logo-container {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  margin: 0 auto 32px;
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.splash-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.splash-ring-1 {
+  border-top-color: var(--accent-cyan);
+  animation: splashSpin 1.5s linear infinite;
+}
+
+.splash-ring-2 {
+  inset: 4px;
+  border-right-color: var(--accent-blue);
+  animation: splashSpin 2s linear infinite reverse;
+}
+
+.splash-ring-3 {
+  inset: 14px;
+  border-bottom-color: var(--accent-purple);
+  animation: splashSpin 2.5s linear infinite;
+}
+
+@keyframes splashSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Vidrio flotante detrás del logo (halo glass) */
+.splash-glass {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 60px rgba(0, 212, 255, 0.35), inset 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+/* Logo real de la app (PNG generado) — nítido a cualquier tamaño */
+.splash-logo {
+  position: absolute;
+  inset: 18px;
+  width: calc(100% - 36px);
+  height: calc(100% - 36px);
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+}
+
+.splash-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.splash-pro {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.splash-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 40px;
+}
+
+.splash-loader {
+  width: 200px;
+  height: 3px;
+  background: var(--border-color);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+  overflow: hidden;
+}
+
+.splash-loader-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  border-radius: 2px;
+  /* Sincronizado con la secuencia de arranque (~1.4s hasta "Sistema listo.") */
+  animation: splashLoad 1.4s ease-out forwards;
+}
+
+@keyframes splashLoad {
+  0% { width: 0%; }
+  35% { width: 45%; }
+  70% { width: 80%; }
+  100% { width: 100%; }
+}
+
+.splash-status {
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  animation: statusBlink 1s ease-in-out infinite;
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.splash-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.splash-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 3s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-20px) scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════════ */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(6, 10, 18, 0.65);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 14px 20px;
+  /* iPhone: respeta el notch / Dynamic Island al hacer scroll */
+  padding-top: calc(14px + env(safe-area-inset-top));
+}
+
+/* Línea de luz degradada bajo el header: detalle premium */
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), rgba(168, 85, 247, 0.4), transparent);
+  opacity: 0.7;
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  animation: headerLogoGlow 3s ease-in-out infinite;
+}
+
+.header-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes headerLogoGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+  50% { box-shadow: 0 4px 26px rgba(0, 212, 255, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.35); }
+}
+
+.header-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.header-pro {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-subtitle {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-header {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-header:active {
+  transform: scale(0.92);
+}
+
+.btn-add-glow {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+}
+
+.btn-add-glow:active {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN
+   ═══════════════════════════════════════════════════════════════ */
+
+.main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px 16px 100px;
+}
+
+/* ── Jarvis Bar ── */
+.jarvis-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.jarvis-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  animation: scanline 4s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.5; }
+}
+
+.jarvis-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  flex-shrink: 0;
+  animation: jarvisPulse 2s ease-in-out infinite;
+}
+
+@keyframes jarvisPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.3); }
+  50% { box-shadow: 0 0 0 4px rgba(0, 212, 255, 0); }
+}
+
+.jarvis-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.jarvis-message {
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+  font-weight: 500;
+  line-height: 1.5;
+  font-style: italic;
+  will-change: auto;
+}
+
+.jarvis-message .jefe {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* ── Summary Dashboard ── */
+.summary-dashboard {
+  margin-bottom: 20px;
+}
+
+/* Cifras: los centavos se atenúan para que la parte principal del monto
+   (miles/pesos) sea lo único que la vista capture de inmediato. */
+.cents {
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-left: 1px;
+  vertical-align: baseline;
+}
+
+/* ── Fila de KPIs globales (compacta, reemplaza al cuadro grande) ──
+   Tres cifras esenciales — Programado · Retirado · Falta — sin duplicar
+   información con las tarjetas por banco que van debajo. */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kpi {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 11px 10px 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Franja superior de color: codifica de un vistazo qué cifra es cuál. */
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.kpi-total::before { background: var(--accent-cyan); }
+.kpi-retirado::before { background: var(--status-orange); }
+.kpi-falta::before { background: var(--status-red); }
+
+.kpi-label {
+  font-size: 0.56rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kpi-value {
+  font-size: clamp(1.05rem, 4.6vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kpi-retirado .kpi-value { color: var(--status-orange); }
+.kpi-falta .kpi-value { color: var(--status-red); }
+
+.kpi-sub {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Barra de progreso global del Total General — traduce los dos números
+   de arriba (retirado / falta) a una lectura visual instantánea. */
+.summary-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.summary-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.35);
+}
+
+/* ── Panel de análisis: donut de distribución + leyenda por banco ── */
+.analysis-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hairline de acento: toque premium sin gastar espacio. */
+.analysis-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), #8b5cf6);
+}
+
+.donut-wrap {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  flex-shrink: 0;
+}
+
+.donut-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.donut-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 14;
+}
+
+.donut-seg {
+  transition: stroke-width 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
+  cursor: pointer;
+}
+
+/* Solo un segmento se resalta; los demás se atenúan. */
+.donut-seg:hover {
+  stroke-width: 17;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.donut-seg.dim {
+  opacity: 0.25;
+}
+
+@keyframes donutDraw {
+  from { stroke-dasharray: 0 327; }
+  to { stroke-dasharray: var(--seg-len) 327; }
+}
+
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  width: 76px;
+}
+
+.donut-center-value {
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.donut-center-label {
+  font-size: 0.54rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.analysis-side {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bank-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.68rem;
+  min-width: 0;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.legend-name {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.legend-amount {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.legend-pct {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  min-width: 26px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend-empty {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Chips de estado (pendientes · en proceso · listos) ── */
+.status-chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.status-chip {
+  position: relative;
+  padding: 7px 4px 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  overflow: hidden;
+}
+
+.status-chip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.status-chip .sc-value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-chip .sc-label {
+  display: block;
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 1px;
+}
+
+.status-chip .sc-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  margin: 0;
+}
+
+.sc-red::before { background: var(--status-red); }
+.sc-red .sc-value { color: var(--status-red); }
+.sc-red .sc-icon { background: var(--status-red); box-shadow: 0 0 5px var(--status-red); }
+
+.sc-orange::before { background: var(--status-orange); }
+.sc-orange .sc-value { color: var(--status-orange); }
+.sc-orange .sc-icon { background: var(--status-orange); box-shadow: 0 0 5px var(--status-orange); }
+
+.sc-green::before { background: var(--status-green); }
+.sc-green .sc-value { color: var(--status-green); }
+.sc-green .sc-icon { background: var(--status-green); box-shadow: 0 0 5px var(--status-green); }
+
+/* En pantallas muy angostas el panel de análisis se apila verticalmente */
+@media (max-width: 400px) {
+  .analysis-panel {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .analysis-side {
+    width: 100%;
+  }
+}
+
+/* ── Totales POR BANCO (tarjetas compactas) ──
+   Cada banco tiene su propia tarjeta con Total · Retirado · Falta y su
+   barra de progreso. Se agrupan en una fila horizontal con scroll para
+   que la sección superior nunca se sature aunque haya muchos bancos. */
+.bank-totals {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bank-totals::-webkit-scrollbar {
+  height: 4px;
+}
+
+.bank-totals::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.bank-total-card {
+  flex: 0 0 auto;
+  width: 158px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 13px;
+  scroll-snap-align: start;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.bank-total-card:active {
+  transform: scale(0.97);
+  border-color: var(--accent-cyan);
+}
+
+/* Franja superior del color del banco: identifica rápido cada tarjeta */
+.bank-total-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border-color);
+}
+
+.btb-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.btb-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.btb-names {
+  min-width: 0;
+}
+
+.btb-bank {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btb-count {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+  white-space: nowrap;
+}
+
+.btb-figures {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.btb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.btb-label {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.btb-value {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.btb-green { color: var(--status-green); }
+.btb-orange { color: var(--status-orange); }
+
+.btb-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.btb-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btb-fill.bt-red { background: var(--status-red); }
+.btb-fill.bt-orange { background: var(--status-orange); }
+.btb-fill.bt-green { background: var(--status-green); }
+
+/* Contadores de estado del banco (pendiente · en proceso · completado) */
+.btb-status {
+  display: flex;
+  gap: 6px;
+}
+
+.btb-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.btb-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.btb-dot-red { color: var(--status-red); }
+.btb-dot-orange { color: var(--status-orange); }
+.btb-dot-green { color: var(--status-green); }
+
+/* En pantallas anchas se muestran en rejilla para aprovechar el espacio */
+@media (min-width: 560px) {
+  .bank-totals {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    overflow-x: visible;
+  }
+
+  .bank-total-card {
+    width: auto;
+  }
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.summary-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16px 10px;
+  text-align: center;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+}
+
+.summary-card:active {
+  transform: scale(0.97);
+}
+
+.sc-red::before { background: var(--status-red); }
+.sc-orange::before { background: var(--status-orange); }
+.sc-green::before { background: var(--status-green); }
+
+/* Icono: círculo de color con el tono del estado — geometría limpia,
+   sin emojis multicolor que compiten con la cifra. */
+.sc-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+}
+
+.sc-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sc-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.sc-red { border-color: var(--status-red-border); }
+.sc-red .sc-value { color: var(--status-red); }
+.sc-red .sc-icon { background: var(--status-red); box-shadow: 0 0 8px var(--status-red); }
+.sc-orange { border-color: var(--status-orange-border); }
+.sc-orange .sc-value { color: var(--status-orange); }
+.sc-orange .sc-icon { background: var(--status-orange); box-shadow: 0 0 8px var(--status-orange); }
+.sc-green { border-color: var(--status-green-border); }
+.sc-green .sc-value { color: var(--status-green); }
+.sc-green .sc-icon { background: var(--status-green); box-shadow: 0 0 8px var(--status-green); }
+
+/* ── Bank Cards ── */
+.bank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Encabezado de grupo (empresa) ── */
+.bank-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px 0;
+  margin-top: 6px;
+}
+
+.bank-group:first-child {
+  margin-top: 0;
+}
+
+.bg-icon {
+  font-size: 16px;
+}
+
+.bg-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.bg-count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.bank-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+  padding-left: 22px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease backwards;
+}
+
+/* Franja lateral fina de estado: un solo color por tarjeta, sin teñir el
+   fondo completo (legibilidad en listas largas). */
+.bank-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.bank-card.status-red::before { background: linear-gradient(180deg, var(--status-red), rgba(239, 68, 68, 0.35)); }
+.bank-card.status-orange::before { background: linear-gradient(180deg, var(--status-orange), rgba(245, 158, 11, 0.35)); }
+.bank-card.status-green::before { background: linear-gradient(180deg, var(--status-green), rgba(34, 197, 94, 0.35)); }
+
+/* La tarjeta se "enciende" al tocarla: borde sutil del estado. */
+.bank-card.status-red:active { border-color: var(--status-red-border); }
+.bank-card.status-orange:active { border-color: var(--status-orange-border); }
+.bank-card.status-green:active { border-color: var(--status-green-border); }
+
+.bank-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.bank-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bank-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
+}
+
+.bank-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+/* Etiqueta de empresa: grande, con el color propio de cada empresa, para
+   que al registrar/editar retiros siempre se vea a qué empresa se trabaja. */
+.bank-company-tag {
+  align-self: flex-start;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bank-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Hora de cierre: sigue visible pero sin robarle protagonismo al banco. */
+.bank-close-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Respaldo si alguna vista antigua sigue usando la línea empresa-texto. */
+.bank-company {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-top: 3px;
+}
+
+.bank-status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  position: relative;
+}
+
+/* Badge de estado: punto luminoso + color sobre fondo casi neutro.
+   Así, con muchas tarjetas, la lista no se convierte en un semáforo. */
+.bank-status-badge::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.bank-card.status-red .bank-status-badge { background: rgba(239, 68, 68, 0.08); color: var(--status-red); border: 1px solid rgba(239, 68, 68, 0.18); }
+.bank-card.status-orange .bank-status-badge { background: rgba(245, 158, 11, 0.08); color: var(--status-orange); border: 1px solid rgba(245, 158, 11, 0.18); }
+.bank-card.status-green .bank-status-badge { background: rgba(34, 197, 94, 0.08); color: var(--status-green); border: 1px solid rgba(34, 197, 94, 0.18); }
+
+/* Amount Section */
+.amount-section {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.amount-display { flex: 1; }
+
+.amount-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.amount-value {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.amount-remaining { text-align: right; }
+.amount-remaining .amount-value { font-size: 1.15rem; }
+
+/* "Falta" en cian y "Retirado" en verde: cada color cuenta una historia
+   distinta y es la MISMA que el resto de la app (verde = completado). */
+.amount-remaining .amount-value { color: var(--accent-cyan); }
+.bank-card.status-green .amount-remaining .amount-value { color: var(--status-green); }
+
+/* La cifra grande domina su columna: etiqueta superior sutil para que el
+   monto se lea primero de un vistazo. */
+.amount-label {
+  opacity: 0.9;
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Una sola tonalidad por estado (sin degradados): limpia y legible. */
+.progress-fill.status-red { background: var(--status-red); }
+.progress-fill.status-orange { background: var(--status-orange); }
+.progress-fill.status-green { background: var(--status-green); }
+
+/* Percentage — el progreso va debajo de la barra para no interrumpir
+   el flujo visual: barra → % → temporizador → botones. */
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progress-percent {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+
+.bank-card.status-red .progress-percent { color: var(--text-secondary); }
+.bank-card.status-orange .progress-percent { color: var(--text-secondary); }
+.bank-card.status-green .progress-percent { color: var(--text-secondary); }
+
+/* Timer Section */
+.timer-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.timer-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timer-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  animation: timerPulse 2s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.bank-card.status-red .timer-value { color: var(--text-primary); }
+.bank-card.status-orange .timer-value { color: var(--text-primary); }
+.bank-card.status-green .timer-value { color: var(--accent-cyan); animation: none; }
+
+/* "Completado" en verde: el mismo color que la barra, el badge y el contador.
+   Un solo verde = una sola idea en toda la app. */
+.timer-complete {
+  font-size: 0.78rem;
+  color: var(--status-green);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.timer-complete::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: 0 0 6px var(--status-green);
+}
+
+.timer-closed {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Action Buttons — jerarquía clara: la acción principal (registrar) ocupa
+   más peso visual que Editar/Eliminar, para que "qué tocar" sea obvio. */
+.bank-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-action {
+  flex: 1;
+  padding: 12px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
+.btn-action:active { transform: scale(0.96); }
+
+.btn-action.primary {
+  flex: 2.4;
+  border: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  box-shadow: 0 6px 18px rgba(0, 212, 255, 0.28);
+}
+
+.btn-action.primary:active {
+  box-shadow: 0 2px 8px rgba(0, 212, 255, 0.25);
+}
+
+.btn-action.danger {
+  border-color: var(--status-red-border);
+  color: var(--status-red);
+  background: var(--status-red-soft);
+}
+
+.btn-action.edit-btn {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.25);
+  color: var(--accent-purple);
+}
+
+.btn-action.edit-btn:active {
+  background: rgba(168, 85, 247, 0.2);
+}
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-visual {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 24px;
+}
+
+.empty-circle {
+  position: absolute;
+  inset: 20px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Logo real de la app dentro del estado vacío (nítido a cualquier tamaño) */
+.empty-icon-img {
+  width: 64%;
+  height: 64%;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 18px rgba(0, 212, 255, 0.25));
+}
+
+.empty-icon {
+  font-size: 40px;
+  opacity: 0.6;
+}
+
+.empty-rings {
+  position: absolute;
+  inset: 0;
+}
+
+.empty-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  animation: emptyRing 3s ease-in-out infinite;
+}
+
+.empty-ring:nth-child(2) {
+  inset: -10px;
+  animation-delay: 1.5s;
+}
+
+@keyframes emptyRing {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.05; transform: scale(1.03); }
+}
+
+.empty-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.empty-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.btn-empty-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-empty-add:active {
+  transform: scale(0.96);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MODALS
+   ═══════════════════════════════════════════════════════════════ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius) var(--radius) 0 0;
+  width: 100%;
+  max-width: 500px;
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-y: auto;
+  padding: 16px 16px 36px;
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  /* Botón "Guardar" siempre alcanzable: se pega abajo al seguir el scroll */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Los elementos del modal se apilan de forma natural */
+.modal > * {
+  flex-shrink: 0;
+}
+
+/* Contenido intermedio crece y permite scroll interno */
+.modal > .form-step,
+.modal > .history-list,
+.modal > .day-detail-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Acciones SIEMPRE a la mano en el modal de retiro ──
+   Los botones Registrar/Cancelar viven en un bloque fijo al pie del
+   modal: da igual cuánto crezcan los campos de cheque/tarjeta,
+   el botón principal nunca sale de pantalla. */
+.modal-actions-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin-top: 14px;
+  margin-left: -16px;
+  margin-right: -16px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(13, 20, 35, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.modal-actions-sticky .form-group {
+  margin-bottom: 10px;
+}
+
+.modal-actions-sticky .btn-cancel {
+  margin-top: 6px;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0);
+}
+
+.modal-small {
+  max-width: 380px;
+  text-align: center;
+  padding: 26px 22px 36px;
+}
+
+.modal-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  margin: 0 auto 12px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.modal-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-close:active {
+  transform: scale(0.9);
+  color: var(--text-primary);
+}
+
+/* ── Steps Indicator — compacto: guía horizontal sin robar espacio ── */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 16px;
+  padding: 0 6px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.step-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.step.active .step-dot {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.2);
+}
+
+.step.completed .step-dot {
+  border-color: var(--status-green);
+  background: var(--status-green);
+  color: white;
+}
+
+.step-text {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.step.active .step-text { color: var(--accent-cyan); }
+.step.completed .step-text { color: var(--status-green); }
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border-color);
+  margin: 0 6px;
+  margin-bottom: 16px;
+  max-width: 60px;
+  transition: var(--transition);
+}
+
+.step-line.active {
+  background: var(--accent-cyan);
+}
+
+/* ── Form Steps ── */
+.form-step {
+  display: none;
+}
+
+.form-step.active {
+  display: block;
+  animation: fadeInUp 0.3s ease;
+}
+
+/* Company Grid */
+.company-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.company-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-color);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.company-card:active {
+  transform: scale(0.96);
+}
+
+.company-card.selected {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+}
+
+.cc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.cc-name {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.company-card.selected .cc-name {
+  color: var(--accent-cyan);
+}
+
+/* Bank Grid */
+.bank-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bank-option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 13px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border-color);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.bank-option:active {
+  transform: scale(0.98);
+}
+
+.bank-option.selected {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+}
+
+.bo-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.bo-info {
+  flex: 1;
+}
+
+.bo-name {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bo-detail {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.bo-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.bank-option.selected .bo-check {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+/* Selection Summary */
+.selection-summary {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  margin-bottom: 14px;
+}
+
+.ss-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.ss-row + .ss-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.ss-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ss-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+/* ── Form Elements — tamaño normal y ritmo uniforme ──
+   Todo el formulario respira con el mismo ritmo (13px) para que cada
+   modal quepa completo y la info siempre esté a la mano, sin scroll innecesario. */
+.form-group {
+  margin-bottom: 13px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10.5px 13px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-family: inherit;
+  transition: var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px var(--accent-cyan-soft);
+}
+
+/* Amount Input — cifra protagonista, pero medida para que todo el
+   formulario (cheques + tarjetas) quepa sin perder contexto. */
+.amount-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.amount-prefix {
+  position: absolute;
+  left: 13px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 11px 13px 11px 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: inherit;
+  transition: var(--transition);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px var(--accent-cyan-soft);
+}
+
+.amount-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.amount-hint {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* ── Buttons ── */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn-next, .btn-submit {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  color: white;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.btn-next:active, .btn-submit:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.btn-next:disabled, .btn-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-back {
+  padding: 11px 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+
+.btn-back:active {
+  transform: scale(0.96);
+}
+
+.btn-cancel {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: var(--transition);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Botón Compartir: mismo estilo "outline" cian que el resto de la app
+   (coherente con .btn-add-glow / .day-detail-actions) en vez del bloque
+   azul, que se veía pesado y fuera de lugar en los modales. */
+.btn-share {
+  flex: 1;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.12);
+}
+
+.btn-share:active {
+  transform: scale(0.97);
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+}
+
+.btn-danger {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--status-red);
+  color: white;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-danger:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* Delete Modal */
+.delete-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.delete-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.delete-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* ── Withdraw Info Card — bloque compacto de contexto ──
+   Cabecera + 3 filas + barra en un solo bloque tenue: sirve de "ancla"
+   siempre visible sobre el formulario. */
+.withdraw-info-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.wi-bank {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.wi-company {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.wi-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 9px 0;
+}
+
+.wi-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.wi-row span:last-child {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.wi-remaining span:last-child {
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+}
+
+.wi-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 9px;
+}
+
+.wi-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  max-width: 90%;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.toast-message {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Brillo "shimmer" recorriendo la cifra principal del Total Programado:
+   micro-interacción de nivel premium que guía la mirada a la cifra clave. */
+.kpi-total .kpi-value {
+  background: linear-gradient(110deg, var(--text-primary) 40%, rgba(0, 212, 255, 0.95) 50%, var(--text-primary) 60%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 4.5s linear infinite;
+}
+
+@keyframes shimmerText {
+  0% { background-position: 220% 0; }
+  100% { background-position: -20% 0; }
+}
+
+/* Los números "cuentan" al actualizarse (activado desde JS con .counting) */
+.counting {
+  animation: countPulse 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes countPulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Elevación suave al enfocar la tarjeta con el puntero (escritorio) —
+   da sensación premium sin saturar la lista. */
+@media (hover: hover) and (pointer: fine) {
+  .bank-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-md);
+  }
+
+  .status-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .legend-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.bank-card:nth-child(1) { animation-delay: 0.05s; }
+.bank-card:nth-child(2) { animation-delay: 0.1s; }
+.bank-card:nth-child(3) { animation-delay: 0.15s; }
+.bank-card:nth-child(4) { animation-delay: 0.2s; }
+.bank-card:nth-child(5) { animation-delay: 0.25s; }
+.bank-card:nth-child(6) { animation-delay: 0.3s; }
+
+/* ── Acciones de la tarjeta (siempre a la mano, fijas abajo) ──
+   Registrar · Editar · Eliminar viven en una barra sticky al pie de la
+   tarjeta: nunca hay que hacer scroll para tocarlas. */
+.bank-card .bank-actions {
+  position: sticky;
+  bottom: -18px;
+  z-index: 3;
+  margin-top: 14px;
+  margin-left: -6px;
+  margin-right: -6px;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+  background: rgba(17, 26, 45, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 560px) {
+  .bank-card .bank-actions {
+    bottom: -14px;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ── Cheques Section — ligeramente más tenue que el resto de la tarjeta
+   para que las cifras principales sigan dominando la vista. ── */
+.cheques-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-color);
+  opacity: 0.92;
+}
+
+.cheques-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cheques-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.cheques-total {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.cheques-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cheque-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.cheque-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cheque-number {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cheque-name {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.cheque-alias {
+  font-size: 0.68rem;
+  color: var(--accent-cyan);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+.cheque-item-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cheque-amount {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cheque-delete-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--status-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cheque-delete-btn:active {
+  transform: scale(0.9);
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.cheque-edit-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--accent-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cheque-edit-btn:active {
+  transform: scale(0.9);
+  background: rgba(168, 85, 247, 0.25);
+}
+
+/* Cheque Modal Info */
+.cheque-bank-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+}
+
+.cheque-bank-info #chequeBankName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.cheque-bank-info #chequeBankCompany {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* Edit Bank Info Card */
+.edit-bank-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+}
+
+.edit-bank-company {
+  order: -1;
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.edit-bank-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.edit-bank-hint {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FINALIZE DAY & HISTORY STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Finalize Day Button */
+.btn-header.btn-finalize {
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: var(--accent-cyan);
+  position: relative;
+}
+
+.btn-header.btn-finalize:active {
+  background: rgba(0, 212, 255, 0.2);
+  transform: scale(0.92);
+}
+
+.btn-header.btn-finalize::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* ── History List ── */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.history-item:active {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: scale(0.98);
+}
+
+.history-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-summary {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.history-item-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-total {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+.history-total-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.history-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* ── Day Detail ── */
+.day-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 4px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.day-detail-bank {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.day-detail-bank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.day-detail-bank-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.day-detail-bank-company {
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 800;
+}
+
+.day-detail-amounts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.day-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.day-detail-row span:first-child {
+  color: var(--text-secondary);
+}
+
+.day-detail-row span:last-child {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+/* Day Detail Cheques */
+.day-detail-cheques {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.day-detail-cheques-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.day-detail-cheque {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 212, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  margin-bottom: 6px;
+}
+
+.day-detail-cheque-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.day-detail-cheque-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+.day-detail-cheque-name {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.day-detail-cheque-alias {
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+  font-weight: 500;
+}
+
+.day-detail-cheque-amount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Day Detail Edit Button */
+.day-detail-edit-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.day-detail-edit-btn:active {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  transform: scale(0.98);
+}
+
+/* ── Modal Small (Finalize) ── */
+.modal-small {
+  max-width: 360px;
+  text-align: center;
+  padding: 32px 24px;
+}
+
+.modal-small .delete-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.modal-small .delete-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.modal-small .delete-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+/* ── Optional Tag ── */
+.optional-tag {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-soft);
+  padding: 2px 6px;
+  border-radius: 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Form Select Styling ── */
+.form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%234a5a7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+/* ── Edit Record Modal ── */
+.modal-overlay#modalEditRecord .form-input[readonly] {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* ── Cheques Integrados en Retiro ── */
+.withdraw-cheques-section {
+  background: var(--bg-secondary);
+  margin-bottom: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-top: 4px;
+}
+
+.withdraw-cheques-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.withdraw-cheques-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.withdraw-cheque-fields {
+  margin-top: 0;
+}
+
+/* Grid compacto: 2 columnas para número/nombre, alias a lo ancho */
+.withdraw-cheque-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.withdraw-cheque-grid .form-group {
+  margin-bottom: 0;
+}
+
+.withdraw-cheque-grid .wcg-full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 380px) {
+  .withdraw-cheque-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Resumen de métodos en la tarjeta del banco */
+.method-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+/* Etiquetas de método de pago (efectivo / cheque / tarjeta) */
+.method-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  margin-top: 0;
+  letter-spacing: 0.3px;
+}
+
+/* Chips de método: fondo neutro + el solo ícono como acento de color.
+   Tres chips sin tres fondos de colores saturados. */
+.method-tag.mt-cash {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.method-tag.mt-cheque {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.method-tag.mt-card {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* Sección de efectivo en la tarjeta del banco */
+.cash-section .cheque-number {
+  color: var(--text-primary);
+}
+
+/* ── Safe area for iPhone ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .main {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+  .modal {
+    padding-bottom: calc(36px + env(safe-area-inset-bottom));
+  }
+  .splash-content {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ── Accesibilidad: respeta a quien pide menos movimiento ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
